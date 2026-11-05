@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}StudyStudio{% endblock %} · StudyStudio</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <script src="{{ url_for('static', filename='js/theme.js') }}" defer></script>
+  {% block head %}{% endblock %}
+</head>
+<body class="app-body">
+<div class="app-layout">
+  <aside class="sidebar">
+    <a class="brand" href="{{ url_for('dashboard') }}"><span class="brand-mark">S</span><span>study<span class="brand-light">studio</span></span></a>
+    <div class="side-label">Workspace</div>
+    <nav class="side-nav">
+      <a class="{% if active_page == 'dashboard' %}active{% endif %}" href="{{ url_for('dashboard') }}"><span class="nav-icon">⌂</span> Overview</a>
+      <a class="{% if active_page == 'courses' %}active{% endif %}" href="{{ url_for('courses') }}"><span class="nav-icon">▦</span> Explore courses</a>
+    </nav>
+    <div class="sidebar-bottom">
+      <div class="side-label">Your space</div>
+      <div class="profile-chip"><span class="avatar">{{ session.get('username', 'S')[:1]|upper }}</span><span><strong>{{ session.get('username', 'Student') }}</strong><small>Student account</small></span></div>
+      <a class="logout-link" href="{{ url_for('logout') }}">Sign out <span>↗</span></a>
+    </div>
+  </aside>
+  <main class="main-area">
+    <header class="topbar">
+      <div><span class="eyebrow">YOUR LEARNING SPACE</span><div class="topbar-title">{% block page_heading %}Welcome back{% endblock %}</div></div>
+      <div class="topbar-actions"><button class="theme-toggle" id="theme-toggle" type="button" aria-label="Switch to dark mode"><span class="theme-glyph">☾</span><span class="theme-label">Dark mode</span></button><a class="topbar-action" href="{{ url_for('courses') }}">Find a course <span>↗</span></a></div>
+    </header>
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}<div class="flash-message">{{ messages[-1] }}</div>{% endif %}
+    {% endwith %}
+    <div class="page-content">{% block content %}{% endblock %}</div>
+    <footer class="app-footer">StudyStudio <span>·</span> Keep learning, one focused step at a time.</footer>
+  </main>
+</div>
+{% block scripts %}{% endblock %}
+</body>
+</html>

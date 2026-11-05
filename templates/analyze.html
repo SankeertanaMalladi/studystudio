@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Learning preferences | StudyStudio</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+<main class="container">
+    <header class="header">
+        <h1>StudyStudio</h1>
+        <h2>Welcome, {{ username }}</h2>
+        <p>Choose a subject and learning preference to begin your assessment.</p>
+    </header>
+    <form action="/start_quiz" method="POST">
+        <section class="card">
+            <h2>Learning preferences</h2>
+            <div class="grid">
+                <div>
+                    <label for="subject">Subject</label>
+                    <select id="subject" name="Subject" required>
+                        <option value="">Select a subject</option>
+                        <option>Python</option><option>Machine Learning</option><option>Deep Learning</option>
+                        <option>Data Science</option><option>Java</option><option>DBMS</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="level">Current skill level</label>
+                    <select id="level" name="CurrentGrade" required>
+                        <option>Beginner</option><option>Intermediate</option><option>Advanced</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="style">Preferred learning style</label>
+                    <select id="style" name="LearningStyle" required>
+                        <option>Videos</option><option>Reading Materials</option><option>Practice Questions</option>
+                    </select>
+                </div>
+            </div>
+        </section>
+        <button class="btn" type="submit">Begin assessment</button>
+    </form>
+</main>
+</body>
+</html>

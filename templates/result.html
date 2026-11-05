@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}Your result · {{ course.title }}{% endblock %}
+{% block page_heading %}Your {{ mode|title|lower }} result{% endblock %}
+{% block content %}
+<section class="result-hero">
+  <div class="result-ring" style="--score: {{ percent }}%"><div><strong>{{ percent }}%</strong><small>YOUR SCORE</small></div></div>
+  <div class="result-copy"><span class="eyebrow">{{ course.title }} · {{ mode|title }}</span><h1>{% if percent >= 85 %}Excellent work.{% elif percent >= 60 %}You’re building momentum.{% else %}Every try teaches you something.{% endif %}</h1><p>{{ score }} correct out of {{ total }} questions.</p><div class="result-feedback"><span class="feedback-mark">✳</span><span>{{ feedback }}</span></div><div class="result-actions"><a class="button button-primary" href="{{ url_for('quiz', course_id=course.id, mode=mode) }}">Try another set <span>→</span></a><a class="button button-outline" href="{{ url_for('course_detail', course_id=course.id) }}">Course home</a></div></div>
+</section>
+{% if review %}
+<section class="section-heading"><div><span class="eyebrow">A CHANCE TO LEARN</span><h2>Review these concepts</h2></div></section>
+<div class="review-list">{% for item in review %}<article class="review-card"><span class="review-index">{{ "%02d"|format(loop.index) }}</span><div><h3>{{ item.question }}</h3><p><strong>Answer:</strong> {{ item.answer }}</p><small>{{ item.explanation }}</small></div></article>{% endfor %}</div>
+{% else %}
+<div class="empty-state compact"><div class="empty-icon">✳</div><h3>Perfect score. Nicely done.</h3><p>Keep going with a mock test or explore the course resources.</p><a class="button button-primary" href="{{ url_for('guidance', course_id=course.id) }}">Build a study plan →</a></div>
+{% endif %}
+{% endblock %}

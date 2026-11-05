@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home | StudyStudio</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+<main class="container">
+    <header class="header">
+        <h1>StudyStudio</h1>
+        <h2>Welcome, {{ username }}</h2>
+        <p>Your focused space for practice and steady progress.</p>
+    </header>
+    <section class="card">
+        <h2>Continue your learning journey</h2>
+        <p>Choose a subject, complete a short assessment, and receive a study plan shaped around your result.</p>
+        <a class="btn" href="/analyze">Choose a subject</a>
+    </section>
+    <section class="buttons">
+        <a class="btn logout" href="/logout">Sign out</a>
+    </section>
+</main>
+</body>
+</html>

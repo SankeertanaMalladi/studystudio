@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}{{ course.title }}{% endblock %}
+{% block page_heading %}{{ course.title }}{% endblock %}
+{% block content %}
+<a class="back-link" href="{{ url_for('courses') }}">← Course library</a>
+<section class="course-hero">
+  <div class="course-hero-main"><span class="course-mark course-mark-large">{{ course.icon }}</span><span class="eyebrow">{{ course.category }} · {{ course.level }}</span><h1>{{ course.title }}</h1><p>{{ course.description }}</p><div class="hero-meta"><span>◷ {{ course.weeks }} weeks</span><span>▦ {{ course.questions|length }} practice concepts</span><span>✳ {{ course.cards|length }} flashcards</span></div></div>
+  <div class="course-hero-side"><span class="eyebrow">YOUR PROGRESS</span><strong>{{ stats.average if stats.average is not none else "—" }}{% if stats.average is not none %}%{% endif %}</strong><span>Average quiz score</span><small>{{ stats.attempts }} completed sessions</small></div>
+</section>
+{% if not enrolled %}<div class="enroll-callout"><span><strong>Interested in this course?</strong><small>Add it to your personal plan to track practice and progress.</small></span><form method="post" action="{{ url_for('enroll_one', course_id=course.id) }}"><button class="button button-primary" type="submit">Add to my plan <span>→</span></button></form></div>{% endif %}
+<section class="section-heading"><div><span class="eyebrow">LEARN BY DOING</span><h2>Pick your next step</h2></div></section>
+<div class="tool-grid">
+  <a class="tool-card tool-flash" href="{{ url_for('flashcards', course_id=course.id) }}"><span class="tool-icon">▤</span><span class="eyebrow">QUICK RECALL</span><h3>Flashcards</h3><p>Review key ideas in small, memorable prompts.</p><span class="tool-link">Start a round →</span></a>
+  <a class="tool-card tool-practice" href="{{ url_for('quiz', course_id=course.id, mode='practice') }}"><span class="tool-icon">✎</span><span class="eyebrow">5 QUESTIONS</span><h3>Practice quiz</h3><p>Check your understanding and learn from explanations.</p><span class="tool-link">Practice now →</span></a>
+  <a class="tool-card tool-mock" href="{{ url_for('quiz', course_id=course.id, mode='mock') }}"><span class="tool-icon">◷</span><span class="eyebrow">MOCK ASSESSMENT</span><h3>Mock test</h3><p>Take a focused assessment and review what to strengthen.</p><span class="tool-link">Start mock test →</span></a>
+  <a class="tool-card tool-guide" href="{{ url_for('guidance', course_id=course.id) }}"><span class="tool-icon">✳</span><span class="eyebrow">STUDY COACH</span><h3>AI guidance</h3><p>Turn your goal, available time, and quiz results into a weekly plan.</p><span class="tool-link">Build a study plan →</span></a>
+</div>
+<section class="section-heading resources-heading"><div><span class="eyebrow">CURATED FOR THIS COURSE</span><h2>Resources & video lessons</h2></div></section>
+<div class="resource-list">
+  {% for resource in course.resources %}
+  <a class="resource-row" href="{{ resource.url }}" target="_blank" rel="noopener noreferrer"><span class="resource-type">{{ resource.kind }}</span><span class="resource-copy"><strong>{{ resource.title }}</strong><small>{{ resource.description }}</small></span><span class="resource-arrow">↗</span></a>
+  {% endfor %}
+</div>
+<div class="note-card"><span class="note-symbol">✳</span><p><strong>Study tip</strong> Try retrieval first: answer a question from memory before checking your notes. Short review sessions spaced across the week help you notice what is sticking.</p></div>
+{% endblock %}

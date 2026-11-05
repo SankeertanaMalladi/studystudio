@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}AI guidance · {{ course.title }}{% endblock %}
+{% block page_heading %}Your study coach · {{ course.title }}{% endblock %}
+{% block content %}
+<a class="back-link" href="{{ url_for('course_detail', course_id=course.id) }}">← Back to {{ course.title }}</a>
+<section class="guide-intro"><span class="guide-spark">✳</span><div><span class="eyebrow">PERSONALIZED STUDY COACH</span><h1>A plan that fits your week.</h1><p>Set a goal and a little time aside. Your plan also uses your latest quiz result when available.</p></div></section>
+<div class="guide-layout">
+  <form class="guide-form" method="post">
+    <label for="goal">What would you like to achieve?</label><input id="goal" name="goal" maxlength="120" value="{{ goal }}" placeholder="e.g. Build a small Python project">
+    <label for="hours">How many hours can you study this week?</label><div class="range-line"><input type="range" id="hours" name="hours" min="2" max="20" value="{{ hours }}"><strong><span id="hours-value">{{ hours }}</span> hrs</strong></div>
+    <button type="submit" class="button button-primary button-wide">Build my weekly plan <span>→</span></button>
+    <p class="privacy-note">Your plan is generated from your course, goal, time, and learning progress.</p>
+  </form>
+  <aside class="guide-snapshot"><span class="eyebrow">YOUR STARTING POINT</span><div class="snapshot-score">{% if latest_score is not none %}{{ latest_score }}%{% else %}New{% endif %}</div><p>{% if latest_score is not none %}Latest quiz score{% else %}No quiz score yet — your plan will focus on building a first routine.{% endif %}</p><div class="snapshot-divider"></div><span class="snapshot-stat">{{ stats.attempts }} <small>practice sessions</small></span></aside>
+</div>
+{% if plan %}
+<section class="section-heading"><div><span class="eyebrow">YOUR WEEKLY ROADMAP</span><h2>{{ goal }}</h2></div><span class="plan-hours">{{ hours }} hours this week</span></section>
+<div class="plan-list">{% for day, task in plan %}<div class="plan-row"><span class="plan-day">{{ day }}</span><span class="plan-dot"></span><span class="plan-task">{{ task }}</span><span class="plan-duration">{{ (hours // (plan|length)) if plan|length else 1 }}h focus</span></div>{% endfor %}</div>
+{% endif %}
+{% endblock %}
+{% block scripts %}
+<script>
+const hoursInput = document.getElementById("hours");
+hoursInput.addEventListener("input", () => document.getElementById("hours-value").textContent = hoursInput.value);
+</script>
+{% endblock %}

@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sign in · StudyStudio</title><link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body class="auth-body">
+<main class="auth-layout">
+  <section class="auth-showcase">
+    <a class="brand brand-on-dark" href="/"><span class="brand-mark">S</span><span>study<span class="brand-light">studio</span></span></a>
+    <div class="showcase-copy">
+      <span class="eyebrow eyebrow-light">A BETTER WAY TO LEARN</span>
+      <h1>Make progress<br>you can <em>feel.</em></h1>
+      <p>Build a learning plan around what interests you. Practice, check your progress, and keep moving forward.</p>
+    </div>
+    <div class="showcase-note"><span class="note-symbol">✳</span><span>Learn at your own pace.<br><strong>Your next step is waiting.</strong></span></div>
+  </section>
+  <section class="auth-panel">
+    <button class="theme-toggle auth-theme-toggle" id="theme-toggle" type="button" aria-label="Switch to dark mode"><span class="theme-glyph">☾</span><span class="theme-label">Dark mode</span></button>
+    <div class="auth-form-wrap">
+      <span class="eyebrow">WELCOME BACK</span>
+      <h2>Sign in to continue</h2>
+      <p class="form-intro">Pick up right where you left off.</p>
+      {% if error %}<div class="form-error">{{ error }}</div>{% endif %}
+      <form method="post" action="{{ url_for('login') }}" class="form-stack">
+        <label for="username">Username</label><input id="username" name="username" autocomplete="username" placeholder="Your username" required>
+        <label for="password">Password</label><input id="password" name="password" type="password" autocomplete="current-password" placeholder="Your password" required>
+        <button class="button button-primary button-wide" type="submit">Sign in <span>→</span></button>
+      </form>
+      <p class="auth-switch">New to StudyStudio? <a href="{{ url_for('register') }}">Create an account</a></p>
+    </div>
+    <div class="auth-footnote">A calm place to grow your skills.</div>
+  </section>
+</main>
+<script src="{{ url_for('static', filename='js/theme.js') }}" defer></script>
+</body>
+</html>

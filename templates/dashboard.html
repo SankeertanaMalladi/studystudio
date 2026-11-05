@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}Overview{% endblock %}
+{% block page_heading %}Good to see you, {{ username.split(' ')[0] }}{% endblock %}
+{% block content %}
+<section class="welcome-banner">
+  <div class="welcome-copy"><span class="eyebrow eyebrow-light">YOUR NEXT CHAPTER</span><h1>Small steps add up.</h1><p>Choose a course, build a steady rhythm, and see how far you can go.</p><a class="button button-light" href="{{ url_for('courses') }}">Explore courses <span>→</span></a></div>
+  <div class="banner-orbit"><div class="orbit-core">✳</div><span class="orbit-dot dot-one"></span><span class="orbit-dot dot-two"></span><span class="orbit-dot dot-three"></span></div>
+</section>
+<section class="stat-grid">
+  <div class="stat-card"><span class="stat-icon icon-lilac">▦</span><span class="stat-label">Courses in your plan</span><strong>{{ course_count }}</strong><span class="stat-caption">Personalized to your interests</span></div>
+  <div class="stat-card"><span class="stat-icon icon-peach">✓</span><span class="stat-label">Learning sessions</span><strong>{{ attempts }}</strong><span class="stat-caption">Practice and mock tests</span></div>
+  <div class="stat-card"><span class="stat-icon icon-sky">✳</span><span class="stat-label">Latest quiz score</span><strong>{% if recent %}{{ recent[0].percent }}%{% else %}—{% endif %}</strong><span class="stat-caption">{% if recent %}{{ recent[0].course_title }}{% else %}Your first session will appear here{% endif %}</span></div>
+</section>
+<section class="section-heading"><div><span class="eyebrow">YOUR LEARNING PLAN</span><h2>Courses you’re exploring</h2></div><a class="text-link" href="{{ url_for('courses') }}">Manage courses <span>→</span></a></section>
+{% if courses %}
+<div class="course-grid">
+  {% for course in courses %}
+  <a class="course-card" href="{{ url_for('course_detail', course_id=course.id) }}">
+    <div class="course-card-top"><span class="course-mark mark-{{ course.category|lower|replace(' ', '-') }}">{{ course.icon }}</span><span class="course-arrow">↗</span></div>
+    <span class="course-category">{{ course.category }}</span><h3>{{ course.title }}</h3><p>{{ course.description }}</p>
+    <div class="course-card-meta"><span>{{ course.level }}</span><span>{{ course.weeks }} weeks</span></div>
+  </a>
+  {% endfor %}
+</div>
+{% else %}
+<div class="empty-state"><div class="empty-icon">▦</div><h3>Your learning plan is ready to take shape</h3><p>Pick subjects you’re curious about. We’ll gather the flashcards, practice, and resources in one place.</p><a class="button button-primary" href="{{ url_for('courses') }}">Choose your courses <span>→</span></a></div>
+{% endif %}
+<section class="section-heading recent-heading"><div><span class="eyebrow">KEEP YOUR MOMENTUM</span><h2>Recent practice</h2></div></section>
+{% if recent %}
+<div class="activity-list">
+  {% for result in recent %}
+  <a class="activity-row" href="{{ url_for('course_detail', course_id=result.course_id) }}"><span class="activity-icon">✓</span><span class="activity-name"><strong>{{ result.course_title }}</strong><small>{{ result.mode|title }} · {{ result.created_at[:10] }}</small></span><span class="activity-score">{{ result.percent }}%</span><span class="activity-arrow">↗</span></a>
+  {% endfor %}
+</div>
+{% else %}
+<div class="quiet-card"><span class="quiet-icon">◷</span><span><strong>Your first practice session will show up here.</strong><small>Try a flashcard round or a quick quiz to get started.</small></span></div>
+{% endif %}
+{% endblock %}

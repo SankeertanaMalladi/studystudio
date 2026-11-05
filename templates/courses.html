@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}Explore courses{% endblock %}
+{% block page_heading %}Find your next interest{% endblock %}
+{% block content %}
+<section class="catalog-intro"><div><span class="eyebrow">THE COURSE LIBRARY</span><h1>Curiosity looks good on you.</h1><p>Explore a new subject or add a few to your personal learning plan.</p></div><div class="catalog-count"><strong>{{ courses|length }}</strong><span>guided courses</span></div></section>
+<div class="filter-row"><span class="filter-label">Browse by area</span><button class="filter-chip active" data-filter="all" type="button">All courses</button>{% for category in categories %}<button class="filter-chip" data-filter="{{ category|lower|replace(' ', '-') }}" type="button">{{ category }}</button>{% endfor %}</div>
+<form method="post" action="{{ url_for('enroll') }}">
+  <div class="course-grid catalog-grid">
+    {% for course in courses.values() %}
+    <article class="course-card catalog-card" data-category="{{ course.category|lower|replace(' ', '-') }}">
+      <div class="course-card-top"><span class="course-mark mark-{{ course.category|lower|replace(' ', '-') }}">{{ course.icon }}</span><label class="select-course"><input type="checkbox" name="course_ids" value="{{ course.id }}" {% if course.id in selected %}checked{% endif %}><span>{% if course.id in selected %}In your plan{% else %}Add course{% endif %}</span></label></div>
+      <span class="course-category">{{ course.category }}</span><h3><a href="{{ url_for('course_detail', course_id=course.id) }}">{{ course.title }}</a></h3><p>{{ course.description }}</p>
+      <div class="course-card-meta"><span>{{ course.level }}</span><span>{{ course.weeks }} weeks</span></div>
+      <a class="course-open" href="{{ url_for('course_detail', course_id=course.id) }}">View course <span>→</span></a>
+    </article>
+    {% endfor %}
+  </div>
+  <div class="save-plan-bar"><span>Choose one or more subjects to shape your learning plan.</span><button type="submit" class="button button-primary">Save my courses <span>→</span></button></div>
+</form>
+{% endblock %}
+{% block scripts %}
+<script>
+document.querySelectorAll(".filter-chip").forEach(button => button.addEventListener("click", () => {
+  document.querySelectorAll(".filter-chip").forEach(item => item.classList.remove("active"));
+  button.classList.add("active");
+  const filter = button.dataset.filter;
+  document.querySelectorAll(".catalog-card").forEach(card => {
+    card.hidden = filter !== "all" && card.dataset.category !== filter;
+  });
+}));
+document.querySelectorAll(".select-course input").forEach(input => input.addEventListener("change", () => {
+  input.nextElementSibling.textContent = input.checked ? "In your plan" : "Add course";
+}));
+</script>
+{% endblock %}

@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title %}Flashcards · {{ course.title }}{% endblock %}
+{% block page_heading %}Flashcards · {{ course.title }}{% endblock %}
+{% block content %}
+<a class="back-link" href="{{ url_for('course_detail', course_id=course.id) }}">← Back to {{ course.title }}</a>
+<section class="flash-intro"><span class="eyebrow">QUICK RECALL</span><h1>Recall, then reveal.</h1><p>Try to answer from memory before you turn the card over.</p></section>
+<div class="flash-stage">
+  <div class="flash-count"><span id="card-number">1</span> <span>/ {{ course.cards|length }}</span><span class="flash-progress"><i id="flash-progress"></i></span></div>
+  <button type="button" class="flash-card" id="flash-card" aria-label="Reveal answer">
+    <span class="flash-card-top"><span id="card-side">QUESTION</span><span>Click to flip ↻</span></span>
+    <span class="flash-card-text" id="card-text"></span>
+    <span class="flash-card-hint" id="card-hint">Think of your answer, then tap to reveal.</span>
+  </button>
+  <div class="flash-controls"><button type="button" class="button button-outline" id="previous">← Previous</button><button type="button" class="button button-primary" id="next">Next card →</button></div>
+</div>
+<div class="flash-footer"><span>Study tip: say the answer aloud before revealing it.</span><a href="{{ url_for('quiz', course_id=course.id, mode='practice') }}">Ready for a quiz? →</a></div>
+{% endblock %}
+{% block scripts %}
+<script>
+const cards = {{ course.cards|tojson }};
+let current = 0, revealed = false;
+const card = document.getElementById("flash-card");
+function renderCard() {
+  revealed = false;
+  document.getElementById("card-number").textContent = current + 1;
+  document.getElementById("card-side").textContent = "QUESTION";
+  document.getElementById("card-text").textContent = cards[current].front;
+  document.getElementById("card-hint").textContent = "Think of your answer, then tap to reveal.";
+  document.getElementById("flash-progress").style.width = ((current + 1) / cards.length * 100) + "%";
+  card.classList.remove("revealed");
+  document.getElementById("previous").disabled = current === 0;
+  document.getElementById("next").textContent = current === cards.length - 1 ? "Start again ↻" : "Next card →";
+}
+card.addEventListener("click", () => {
+  revealed = !revealed;
+  document.getElementById("card-side").textContent = revealed ? "ANSWER" : "QUESTION";
+  document.getElementById("card-text").textContent = revealed ? cards[current].back : cards[current].front;
+  document.getElementById("card-hint").textContent = revealed ? "Tap to see the question again." : "Think of your answer, then tap to reveal.";
+  card.classList.toggle("revealed", revealed);
+});
+document.getElementById("previous").addEventListener("click", () => { if (current > 0) current--; renderCard(); });
+document.getElementById("next").addEventListener("click", () => { current = (current + 1) % cards.length; renderCard(); });
+renderCard();
+</script>
+{% endblock %}
